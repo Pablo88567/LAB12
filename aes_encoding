@@ -1,0 +1,19 @@
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
+
+plik_wejsciowy = input("Zawartosc jakiego pliku chcesz zaszyfrowac?")
+n = int(input("Wybierz dlugosc klucza: 16,24,32:"))
+klucz = get_random_bytes(n) #generowanie klucza o dlugosci 16,24,32 bajtow
+iv = get_random_bytes(16) # wektor inicjujacy, potrzebny do zakodowania aes-em w trybie cbc
+
+#otworzenie i przeczytanie pliku wejsciowego
+with open(plik_wejsciowy,'rb') as f:
+    dane = f.read()
+
+#inicjalizacja kodowania
+cipher = AES.new(klucz, AES.MODE_CBC, iv)
+zaszyfrowane_dane = cipher.encrypt(pad(dane, AES.block_size))
+
+
+print(zaszyfrowane_dane)
